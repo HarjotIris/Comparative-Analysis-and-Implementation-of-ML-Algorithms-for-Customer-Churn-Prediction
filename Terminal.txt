@@ -1,0 +1,310 @@
+=== TELCO CUSTOMER CHURN DATASET EXPLORATION ===
+
+1. DATASET SHAPE AND BASIC INFO:
+Shape: (7043, 21)
+Columns: ['customerID', 'gender', 'SeniorCitizen', 'Partner', 'Dependents', 'tenure', 'PhoneService', 'MultipleLines', 'InternetService', 'OnlineSecurity', 'OnlineBackup', 'DeviceProtection', 'TechSupport', 'StreamingTV', 'StreamingMovies', 'Contract', 'PaperlessBilling', 'PaymentMethod', 'MonthlyCharges', 'TotalCharges', 'Churn']
+
+==================================================
+
+2. FIRST 5 ROWS:
+   customerID  gender  SeniorCitizen Partner Dependents  tenure PhoneService  ... StreamingMovies        Contract PaperlessBilling              PaymentMethod MonthlyCharges TotalCharges Churn
+0  7590-VHVEG  Female              0     Yes         No       1           No  ...              No  Month-to-month              Yes           Electronic check          29.85        29.85    No
+1  5575-GNVDE    Male              0      No         No      34          Yes  ...              No        One year               No               Mailed check          56.95       1889.5    No
+2  3668-QPYBK    Male              0      No         No       2          Yes  ...              No  Month-to-month              Yes               Mailed check          53.85       108.15   Yes
+3  7795-CFOCW    Male              0      No         No      45           No  ...              No        One year               No  Bank transfer (automatic)          42.30      1840.75    No
+4  9237-HQITU  Female              0      No         No       2          Yes  ...              No  Month-to-month              Yes           Electronic check          70.70       151.65   Yes
+
+[5 rows x 21 columns]
+
+==================================================
+
+3. DATA TYPES AND MISSING VALUES:
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 7043 entries, 0 to 7042
+Data columns (total 21 columns):
+ #   Column            Non-Null Count  Dtype
+---  ------            --------------  -----
+ 0   customerID        7043 non-null   object
+ 1   gender            7043 non-null   object
+ 2   SeniorCitizen     7043 non-null   int64
+ 3   Partner           7043 non-null   object
+ 4   Dependents        7043 non-null   object
+ 5   tenure            7043 non-null   int64
+ 6   PhoneService      7043 non-null   object
+ 7   MultipleLines     7043 non-null   object
+ 8   InternetService   7043 non-null   object
+ 9   OnlineSecurity    7043 non-null   object
+ 10  OnlineBackup      7043 non-null   object
+ 11  DeviceProtection  7043 non-null   object
+ 12  TechSupport       7043 non-null   object
+ 13  StreamingTV       7043 non-null   object
+ 14  StreamingMovies   7043 non-null   object
+ 15  Contract          7043 non-null   object
+ 16  PaperlessBilling  7043 non-null   object
+ 17  PaymentMethod     7043 non-null   object
+ 18  MonthlyCharges    7043 non-null   float64
+ 19  TotalCharges      7043 non-null   object
+ 20  Churn             7043 non-null   object
+dtypes: float64(1), int64(2), object(18)
+memory usage: 1.1+ MB
+None
+
+Missing values per column:
+customerID          0
+gender              0
+SeniorCitizen       0
+Partner             0
+Dependents          0
+tenure              0
+PhoneService        0
+MultipleLines       0
+InternetService     0
+OnlineSecurity      0
+OnlineBackup        0
+DeviceProtection    0
+TechSupport         0
+StreamingTV         0
+StreamingMovies     0
+Contract            0
+PaperlessBilling    0
+PaymentMethod       0
+MonthlyCharges      0
+TotalCharges        0
+Churn               0
+dtype: int64
+
+==================================================
+
+4. TARGET VARIABLE DISTRIBUTION:
+Churn Distribution:
+Churn
+No     5174
+Yes    1869
+Name: count, dtype: int64
+Churn percentage:
+Churn
+No     73.463013
+Yes    26.536987
+Name: proportion, dtype: float64
+
+==================================================
+
+5. FEATURE TYPES:
+Numerical Features (3) : ['SeniorCitizen', 'tenure', 'MonthlyCharges']
+Categorical Features (18) : ['customerID', 'gender', 'Partner', 'Dependents', 'PhoneService', 'MultipleLines', 'InternetService', 'OnlineSecurity', 'OnlineBackup', 'DeviceProtection', 'TechSupport', 'StreamingTV', 'StreamingMovies', 'Contract', 'PaperlessBilling', 'PaymentMethod', 'TotalCharges', 'Churn']
+
+==================================================
+
+6. NUMERICAL FEATURE STATISTICS:
+       SeniorCitizen       tenure  MonthlyCharges
+count    7043.000000  7043.000000     7043.000000
+mean        0.162147    32.371149       64.761692
+std         0.368612    24.559481       30.090047
+min         0.000000     0.000000       18.250000
+25%         0.000000     9.000000       35.500000
+50%         0.000000    29.000000       70.350000
+75%         0.000000    55.000000       89.850000
+max         1.000000    72.000000      118.750000
+
+==================================================
+
+7. CHECK FOR UNUSUAL VALUES:
+customerID:7043 unique values
+
+gender:2 unique values
+ Values : ['Female' 'Male']
+
+SeniorCitizen:2 unique values
+ Values : [0 1]
+
+Partner:2 unique values
+ Values : ['Yes' 'No']
+
+Dependents:2 unique values
+ Values : ['No' 'Yes']
+
+tenure:73 unique values
+
+PhoneService:2 unique values
+ Values : ['No' 'Yes']
+
+MultipleLines:3 unique values
+ Values : ['No phone service' 'No' 'Yes']
+
+InternetService:3 unique values
+ Values : ['DSL' 'Fiber optic' 'No']
+
+OnlineSecurity:3 unique values
+ Values : ['No' 'Yes' 'No internet service']
+
+OnlineBackup:3 unique values
+ Values : ['Yes' 'No' 'No internet service']
+
+DeviceProtection:3 unique values
+ Values : ['No' 'Yes' 'No internet service']
+
+TechSupport:3 unique values
+ Values : ['No' 'Yes' 'No internet service']
+
+StreamingTV:3 unique values
+ Values : ['No' 'Yes' 'No internet service']
+
+StreamingMovies:3 unique values
+ Values : ['No' 'Yes' 'No internet service']
+
+Contract:3 unique values
+ Values : ['Month-to-month' 'One year' 'Two year']
+
+PaperlessBilling:2 unique values
+ Values : ['Yes' 'No']
+
+PaymentMethod:4 unique values
+ Values : ['Electronic check' 'Mailed check' 'Bank transfer (automatic)'
+ 'Credit card (automatic)']
+
+MonthlyCharges:1585 unique values
+
+TotalCharges:6531 unique values
+
+Churn:2 unique values
+ Values : ['No' 'Yes']
+
+=== DATA PREPROCESSING ===
+
+1. FIXING TOTAL CHARGES COLUMN:
+TotalCharges dtype before: object
+Sample TotalCharges values: 0      29.85
+1     1889.5
+2     108.15
+3    1840.75
+4     151.65
+Name: TotalCharges, dtype: object
+TotalCharges dtype after: float64
+Missing values in TotalCharges: 11
+Replacing missing TotalCharges with median...
+0 missing values in TotalCharges
+
+==================================================
+
+2. SEPARATING FEATURES AND TARGET
+Features Shape: (7043, 19)
+Target Shape: (7043,)
+Target: Churn
+
+==================================================
+
+3. ENCODING CATEGORICAL VARIABLES:
+Categorical columns: ['gender', 'Partner', 'Dependents', 'PhoneService', 'MultipleLines', 'InternetService', 'OnlineSecurity', 'OnlineBackup', 'DeviceProtection', 'TechSupport', 'StreamingTV', 'StreamingMovies', 'Contract', 'PaperlessBilling', 'PaymentMethod']
+Numerical columns: ['SeniorCitizen', 'tenure', 'MonthlyCharges', 'TotalCharges']
+Target encoded : No = 0, Yes = 1
+
+==================================================
+
+4. SCALING NUMERICAL FEATURES:
+Numerical Features scaled to mean = 0, std = 1
+Sample Scaled Values:    SeniorCitizen    tenure  MonthlyCharges  TotalCharges
+0      -0.439916 -1.277445       -1.160323     -0.994242
+1      -0.439916  0.066327       -0.259629     -0.173244
+2      -0.439916 -1.236724       -0.362660     -0.959674
+3      -0.439916  0.514251       -0.746535     -0.194766
+4      -0.439916 -1.236724        0.197365     -0.940470
+
+==================================================
+
+Final shape of processed features: (7043, 45)
+Encoded target shape: (7043,)
+5. SPLITTING THE DATA INTO TRAIN/TEST:
+Train set: (5634, 45)
+Test shape: (1409, 45)
+Train target distribution: [4139 1495]
+Test target distribution: [1035  374]
+
+==================================================
+
+6. FINAL PREPROCESSED DATA SUMMARY:
+TOTAL FEATURES : 45
+All features are now numerical : [dtype('float64') dtype('bool')]
+No missing values : True
+Target is binary encoded : [0 1]
+
+ Data Preprocessing Complete! Ready for algorithm implementation!
+=== ALGORITHM IMPLEMENTATION AND COMPARISON ===
+
+Training and Evaluating Models...
+
+Training...Logistic Regression
+    Logistic Regression completed training in 0.04 seconds
+    Accuracy : 0.806
+    F1-score: 0.604
+
+Training...Decision Tree
+    Decision Tree completed training in 0.05 seconds
+    Accuracy : 0.729
+    F1-score: 0.497
+
+Training...Random Forest
+    Random Forest completed training in 0.71 seconds
+    Accuracy : 0.779
+    F1-score: 0.533
+
+Training...Support Vector Machine
+    Support Vector Machine completed training in 1.15 seconds
+    Accuracy : 0.788
+    F1-score: 0.569
+
+Training...Naive Bayes
+    Naive Bayes completed training in 0.01 seconds
+    Accuracy : 0.695
+    F1-score: 0.593
+
+Training...K Nearest Neighbors
+    K Nearest Neighbors completed training in 0.23 seconds
+    Accuracy : 0.764
+    F1-score: 0.564
+
+Training...XGBoost
+    XGBoost completed training in 0.25 seconds
+    Accuracy : 0.774
+    F1-score: 0.538
+
+============================================================
+COMPARATIVE ANALYSIS RESULTS
+============================================================
+
+ PERFORMANCE RANKING (by F1-Score):
+                Algorithm  Accuracy  Precision  Recall  F1-Score  Training Time (s)
+0     Logistic Regression     0.806      0.657   0.559     0.604              0.040
+4             Naive Bayes     0.695      0.459   0.837     0.593              0.009
+3  Support Vector Machine     0.788      0.618   0.527     0.569              1.147
+5     K Nearest Neighbors     0.764      0.553   0.575     0.564              0.230
+6                 XGBoost     0.774      0.587   0.497     0.538              0.247
+2           Random Forest     0.779      0.605   0.476     0.533              0.714
+1           Decision Tree     0.729      0.490   0.505     0.497              0.045
+
+
+ BEST PERFORMING MODEL:
+Winner: Logistic Regression
+F1-Score: 0.604
+Accuracy: 0.806
+
+ DETAILED ANALYSIS
+========================================
+
+ DETAILED ANALYSIS OF LOGISTIC REGRESSION:
+              precision    recall  f1-score   support
+
+    No Churn       0.85      0.89      0.87      1035
+       Churn       0.66      0.56      0.60       374
+
+    accuracy                           0.81      1409
+   macro avg       0.75      0.73      0.74      1409
+weighted avg       0.80      0.81      0.80      1409
+
+
+ KEY INSIGHTS:
+========================================
+• Best performing algorithm: Logistic Regression
+• Dataset is imbalanced (73% No Churn, 27% Churn)
+• F1-Score is important for imbalanced datasets
+• Consider the trade-off between precision and recall
+• Training time varies significantly between algorithms

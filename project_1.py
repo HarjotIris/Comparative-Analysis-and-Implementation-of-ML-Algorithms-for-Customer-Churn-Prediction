@@ -186,3 +186,157 @@ print(f"No missing values : {x_processed.isnull().sum().sum() == 0}")
 print(f"Target is binary encoded : {np.unique(y_encoded)}")
 
 print("\n Data Preprocessing Complete! Ready for algorithm implementation!")
+
+# Algorithm implementation and comparison
+from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.svm import SVC
+from sklearn.naive_bayes import GaussianNB
+from sklearn.neighbors import KNeighborsClassifier
+from xgboost import XGBClassifier
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix, classification_report
+import time
+
+print("=== ALGORITHM IMPLEMENTATION AND COMPARISON ===\n")
+
+# storing our models in a dictionary
+models = {
+    'Logistic Regression' : LogisticRegression(random_state=42),
+    #'Multiple Logistic Regression': LogisticRegression(multi_class='multinomial', random_state=42, max_iter=175),
+    #'OVR Logistic Regression': LogisticRegression(multi_class='ovr', random_state=42),
+    'Decision Tree': DecisionTreeClassifier(random_state=42),
+    'Random Forest': RandomForestClassifier(random_state=42, n_estimators=100),
+    'Support Vector Machine': SVC(random_state=42, kernel='linear'),
+    'Naive Bayes': GaussianNB(),
+    'K Nearest Neighbors': KNeighborsClassifier(n_neighbors=5),
+    'XGBoost' : XGBClassifier(eval_metric = 'logloss', random_state = 42)
+}
+
+# dictionary to store results
+results = {}
+print("Training and Evaluating Models...\n")
+
+# training and evaluating each model
+for name, model in models.items():
+    print(f"Training...{name}")
+
+    # recording training time
+    start_time = time.time()
+
+    model.fit(x_train, y_train)
+    y_pred = model.predict(x_test)
+
+    # calculate training time
+    training_time = time.time() - start_time
+
+    # calculate metrics
+    accuracy = accuracy_score(y_test, y_pred)
+    precision = precision_score(y_test, y_pred)
+    recall = recall_score(y_test, y_pred)
+    f1 = f1_score(y_test, y_pred)
+
+    results[name] = {
+        'accuracy': accuracy,
+        'precision': precision,
+        'recall' : recall,
+        'f1_score': f1,
+        'training_time': training_time,
+        'predictions': y_pred
+    }
+
+    print(f"    {name} completed training in {training_time:.2f} seconds")
+    print(f"    Accuracy : {accuracy:.3f}")
+    print(f"    F1-score: {f1:.3f}")
+    print()
+
+print("=" * 60)
+print("COMPARATIVE ANALYSIS RESULTS")
+print("=" * 60)
+
+# creating dataframe for easy comparison
+results_df = pd.DataFrame({
+    'Algorithm': list(results.keys()),
+    'Accuracy': [results[model]['accuracy'] for model in results.keys()],
+    'Precision': [results[model]['precision'] for model in results.keys()],
+    'Recall': [results[model]['recall'] for model in results.keys()],
+    'F1-Score': [results[model]['f1_score'] for model in results.keys()],
+    'Training Time (s)': [results[model]['training_time'] for model in results.keys()] 
+})
+
+# sorting by f1-score (good for imbalanced datasets)
+results_df = results_df.sort_values('F1-Score', ascending=False)
+
+print("\n PERFORMANCE RANKING (by F1-Score):")
+print(results_df.round(3))
+
+print("\n BEST PERFORMING MODEL:")
+best_model = results_df.iloc[0]['Algorithm']
+print(f"Winner: {best_model}")
+print(f"F1-Score: {results_df.iloc[0]['F1-Score']:.3f}")
+print(f"Accuracy: {results_df.iloc[0]['Accuracy']:.3f}")
+
+# create visualizations
+fig, axes = plt.subplots(2, 2, figsize = (15, 10))
+
+# 1. Accuracy Comparison
+axes[0, 0].bar(results_df['Algorithm'], results_df['Accuracy'])
+axes[0, 0].set_title("Accuracy Comparison")
+axes[0, 0].set_ylabel("Accuracy")
+axes[0, 0].tick_params(axis = 'x', rotation = 45)
+
+# 2. F1-Score Comparison
+axes[0, 1].bar(results_df['Algorithm'], results_df['F1-Score'])
+axes[0, 1].set_title("F1-Score Comparison")
+axes[0, 1].set_ylabel("F1-Score")
+axes[0, 1].tick_params(axis = 'x', rotation = 45)
+
+# 3. Training Time Comparison
+axes[1, 0].bar(results_df['Algorithm'], results_df['Training Time (s)'])
+axes[1, 0].set_title("Training Time Comparison")
+axes[1, 0].set_ylabel("Time (seconds)")
+axes[1, 0].tick_params(axis = 'x', rotation = 45)
+
+# 4. Precision vs Recall
+axes[1, 1].scatter(results_df['Recall'], results_df['Precision'], s=100)
+for i, txt in enumerate(results_df['Algorithm']):
+    axes[1, 1].annotate(txt, (results_df['Recall'].iloc[i], results_df['Precision'].iloc[i]), xytext=(5, 5), textcoords='offset points', fontsize=8)
+
+
+axes[1, 1].set_title('Precision vs Recall')
+axes[1, 1].set_xlabel('Recall')
+axes[1, 1].set_ylabel('Precision')
+
+plt.tight_layout()
+plt.show()
+
+print("\n DETAILED ANALYSIS")
+print("=" * 40)
+
+# detailed analysis for the best model
+best_model_name = results_df.iloc[0]['Algorithm']
+best_model_predictions = results[best_model_name]['predictions']
+
+print(f"\n DETAILED ANALYSIS OF {best_model_name.upper()}:")
+print(classification_report(y_test, best_model_predictions, target_names=['No Churn', 'Churn']))
+
+
+# Confusion Matrix for the best model
+cm = confusion_matrix(y_test, best_model_predictions)
+plt.figure(figsize=(8, 6))
+sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', 
+            xticklabels=['No Churn', 'Churn'],
+            yticklabels=['No Churn', 'Churn'])
+plt.title(f'Confusion Matrix - {best_model_name}')
+plt.ylabel('Actual')
+plt.xlabel('Predicted')
+plt.show()
+
+
+print("\n KEY INSIGHTS:")
+print("=" * 40)
+print(f"• Best performing algorithm: {best_model_name}")
+print(f"• Dataset is imbalanced (73% No Churn, 27% Churn)")
+print(f"• F1-Score is important for imbalanced datasets")
+print(f"• Consider the trade-off between precision and recall")
+print(f"• Training time varies significantly between algorithms")
