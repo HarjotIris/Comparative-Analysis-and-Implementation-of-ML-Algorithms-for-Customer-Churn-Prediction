@@ -96,3 +96,8 @@ A fully interactive web app was developed using **Streamlit**.
    ```bash
    git clone https://github.com/yourusername/your-repo-name.git
    cd your-repo-name
+
+---
+
+## 👨‍💻 Author
+🚀 **Harjot / Iris** 
