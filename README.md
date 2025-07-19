@@ -100,4 +100,4 @@ A fully interactive web app was developed using **Streamlit**.
 ---
 
 ## 👨‍💻 Author
-🚀 **Harjot / Iris** 
+✨ **Built with ❤️ by Harjot / Iris**  
